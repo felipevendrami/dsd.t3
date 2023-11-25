@@ -7,9 +7,6 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 import Model.Maquina;
 
@@ -19,32 +16,39 @@ public class Conexao{
 	
 	public Conexao() {}
 	
-	public void aguardaConexao(Maquina maquina) throws IOException {
-		Socket conexao = null;
+	public void aguardarConexoes(Maquina maquina) throws IOException {
 		try {
-			// Inicia o servidor e aguarda requisição enquanto a maquina estiver ativa
 			ServerSocket server = new ServerSocket(this.porta);
+			server.setReuseAddress(true);
+			Socket conexao = null;
+			
+			// Aguarda requisição enquanto a maquina estiver ativa
 			while (maquina.isAtivo()) {
-				System.out.println("Aguardando requisições ...");
-				conexao = server.accept();
-				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conexao.getInputStream()));
-				PrintWriter printWriter = new PrintWriter(conexao.getOutputStream(), true);
-				
-				// Recupera o Ip da máquina que fez a requisição
-				InetAddress ip = conexao.getInetAddress();
-				
-				// Imprime a requisição recebida
-				String mensagemRequisicao = bufferedReader.readLine();
-				System.out.println("Requisição recebida de: " + ip.getHostAddress());
-				
-				// Retorna mensagem para a máquina
-				printWriter.println("OK !");
-				conexao.close();
+				try {
+					System.out.println("Aguardando requisições ...");
+					conexao = server.accept();
+					BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conexao.getInputStream()));
+					PrintWriter printWriter = new PrintWriter(conexao.getOutputStream(), true);
+					
+					// Recupera o Ip da máquina que fez a requisição
+					InetAddress ip = conexao.getInetAddress();
+					
+					String mensagemRequisicao = bufferedReader.readLine();
+					if(mensagemRequisicao != null) { 
+						// Loga a requisição recebida
+						System.out.println("Requisição recebida de: " + ip.getHostAddress());
+						// Retorna mensagem para a máquina
+						printWriter.println("OK !");
+					}
+				} catch (IOException e) {
+					throw new IOException(e.getMessage());
+				}  finally {
+					// Ao final sempre fechamos a conexao
+					conexao.close();
+				}
 			}
-		} catch (IOException e) {
-			System.out.println("Erro:" + e.getMessage());
-		} finally {
-			conexao.close();
+		} catch (Exception e) {
+			System.out.println("Erro duranta a execução do ServerSocket: \n" + e.getMessage());
 		}
 	}
 	

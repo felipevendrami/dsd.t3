@@ -14,7 +14,7 @@ public class Comunicacao{
 	private Rede rede;
 	private Maquina maquina;
 
-	public Comunicacao(Maquina maquina) {
+	public Comunicacao(Maquina maquina){
 		this.maquina = maquina;
 		
 		// Definir qual o papel da máquina caso for líder ou não
@@ -30,11 +30,11 @@ public class Comunicacao{
 		new Thread(() -> {
 			try {
 				Conexao conexao = new Conexao();
-				conexao.aguardaConexao(this.maquina);
+				conexao.aguardarConexoes(this.maquina);
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
-		});
+		}).start();
 	}
 	
 	public void operacaoMaquina() {
@@ -42,24 +42,14 @@ public class Comunicacao{
 		new Thread(() -> {
 			try {
 				Conexao conexao = new Conexao();
-				conexao.fazerRequisicao(maquina, Rede.getMaquinaLiderRede());
+				while (true) {
+					Thread.sleep(REALIZAR_COMUNICACAO);
+					conexao.fazerRequisicao(maquina, Rede.getMaquinaLiderRede());
+				}
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
-		});
-	}
-
-	public void fazerRequisicao() {
-		try {
-			Maquina maquinaLider = Rede.getMaquinaLiderRede();
-			
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-	}
-	
-	public void enviarResposta() {
-		
+		}).start();
 	}
 	
 	public void enviarMensagemEleicao(Maquina maquina, ArrayList<Integer> mensagemEleicao) {
