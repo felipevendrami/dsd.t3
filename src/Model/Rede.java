@@ -38,10 +38,18 @@ public class Rede {
 	public static Maquina getMaquinaLocal() throws UnknownHostException {
 		InetAddress ip = InetAddress.getLocalHost();
 		for(Maquina maquina : Rede.maquinasRede) {
-			if(maquina.getIpMaquina() == ip.getHostAddress()) {
+			if(ip.getHostAddress().equals(maquina.getIpMaquina())) {
 				return maquina;
 			}
 		}
 		return null;
+	}
+	
+	public static Maquina getMaquinaSucessora(Maquina maquinaAtual) {
+		if(Rede.maquinasRede.indexOf(maquinaAtual) == Rede.maquinasRede.size()) {
+			return Rede.maquinasRede.getFirst();
+		} else {
+			return Rede.maquinasRede.get(Rede.maquinasRede.indexOf(maquinaAtual) + 1);
+		}
 	}
 }

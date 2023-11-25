@@ -6,22 +6,21 @@ import java.util.LinkedList;
 public class AnelLogico {
 
 	private LinkedList<Maquina> maquinasParticipantes;
-	private ArrayList<Integer> mensagemEleicao;
+	private String mensagemEleicao;
 
-	public AnelLogico(LinkedList<Maquina> maquinasRede) {
-		this.maquinasParticipantes = maquinasRede;
-		this.mensagemEleicao = new ArrayList<>();
+	public AnelLogico() {
+		this.maquinasParticipantes = Rede.getMaquinasRede();
 	}
 
 	public LinkedList<Maquina> getMaquinasParticipantes() {
 		return maquinasParticipantes;
 	}
 
-	public ArrayList<Integer> getMensagemEleicao() {
+	public String getMensagemEleicao() {
 		return mensagemEleicao;
 	}
-	
-	public void addIpMensagemEleicao(int ip) {
-		this.mensagemEleicao.add(ip);
+
+	public void setMensagemEleicao(String mensagemEleicao) {
+		this.mensagemEleicao = mensagemEleicao;
 	}
 }
