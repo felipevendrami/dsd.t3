@@ -6,7 +6,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		// Mudar Ips de acordo com as máquinas que farão parte da demonstação
+		// Mudar Ips de acordo com as maquinas que farao parte da demonstaçao
 		Maquina m1 = new Maquina("10.15.120.120", true);
 		Maquina m2 = new Maquina("10.15.120.127", false);
 		//Maquina m3 = new Maquina("10.15.120.132", false);
@@ -21,6 +21,10 @@ public class Main {
 		//rede.addMaquinaRede(m4);
 		//rede.addMaquinaRede(m5);
 		
+		String[] teste = new String[2];
+		teste[0] = "ELEICAO";
+		teste[1] = "1,2,3";
+
 		try {
 			Comunicacao comunicacao = new Comunicacao(Rede.getMaquinaLocal());
 		} catch (Exception e) {

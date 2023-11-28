@@ -4,11 +4,11 @@ public class Maquina {
 
 	private String ipMaquina;
 	private boolean ativo;
-	private boolean lider;
+	private boolean coordenador;
 	
-	public Maquina(String ipMaquina, boolean lider) {
+	public Maquina(String ipMaquina, boolean coordenador) {
 		this.ipMaquina = ipMaquina;
-		this.lider = lider;
+		this.coordenador = coordenador;
 		this.ativo = true;
 	}
 
@@ -16,12 +16,12 @@ public class Maquina {
 		return ipMaquina;
 	}
 
-	public boolean isLider() {
-		return lider;
+	public boolean isCoordenador() {
+		return coordenador;
 	}
 
-	public void setLider(boolean lider) {
-		this.lider = lider;
+	public void setCoordenador(boolean coordenador) {
+		this.coordenador = coordenador;
 	}
 
 	public boolean isAtivo() {

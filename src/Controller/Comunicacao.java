@@ -8,34 +8,36 @@ import Model.Rede;
 
 public class Comunicacao{
 
-	// Tempos para execução da Thread
+	// Tempos para execucao da Thread
 	private int REALIZAR_COMUNICACAO = 5000;
-	private int INATIVAR_LIDER = 17000;
+	private int INATIVAR_COORDENADOR = 17000;
 	
 	private Rede rede;
 	private Maquina maquina;
 	private boolean emEleicao = false;
+	private Eleicao eleicao;
 
 	public Comunicacao(Maquina maquina){
 		this.maquina = maquina;
 		
-		// Definir qual o papel da máquina caso for líder ou não
-		if(maquina.isLider()) {
-			operacaoMaquinaLider();
+		// Definir qual o papel da maquina caso for coordenador ou nao
+		if(maquina.isCoordenador()) {
+			operacaoMaquinaCoordenador();
 		} else {
 			operacaoMaquina();
 		}
 	}
 
-	public void operacaoMaquinaLider() {
-		// Como líder, a máquina aguarda as requisições das outras máquinas e responde
+	public void operacaoMaquinaCoordenador() {
+		// Como coordenador, a maquina aguarda as requisiçoes das outras maquinas e responde
 		new Thread(() -> {
 			try {
 				Conexao conexao = new Conexao();
 				conexao.aguardarConexoes(this.maquina);
-				Thread.sleep(INATIVAR_LIDER);
+				// Inativamos o coordenador para forçar a realizacao de uma nova eleicao
+				Thread.sleep(INATIVAR_COORDENADOR);
 				this.maquina.setAtivo(false);
-				System.out.println("LÍDER INATIVO");
+				System.out.println("COORDENADOR INATIVO");
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
@@ -43,32 +45,37 @@ public class Comunicacao{
 	}
 	
 	public void operacaoMaquina() {
-		// Como máquina normal, faz requisições ao líder e recebe a resposta
+		// Como maquina normal, faz requisicoes ao coordenador e recebe a resposta
 		new Thread(() -> {
 			try {
 				Conexao conexao = new Conexao();
 				while (this.maquina.isAtivo()) {
 					verificaEleicaoEmAndamento();
 					Thread.sleep(REALIZAR_COMUNICACAO);
-					conexao.fazerRequisicao(maquina, Rede.getMaquinaLiderRede());
+					conexao.fazerRequisicao(maquina, Rede.getMaquinaCoordenadorRede());
 				}
 			} catch (Exception e) {
 				//System.out.println(e.getMessage());
-				// Máquina percebe que o líder caiu e inicia uma nova eleição se já não houver uma
-				if(!emEleicao) {
-					System.out.println("ATENÇÃO: Sem resposta do líder, iniciando eleição ...");
-					Eleicao eleicao = new Eleicao(this.maquina);
-					this.emEleicao = true;
+				// Maquina percebe que o coordenador caiu e inicia uma nova eleicao se ja nao houver uma
+				if(this.eleicao == null) {
+					System.out.println("ATENCAO: Sem resposta do coordenador, iniciando eleicao ...");
+					this.eleicao = new Eleicao(this.maquina);
 					eleicao.iniciarEleicao();
 				}
 			}
 		}).start();
 	}
 	
-	public void verificaEleicaoEmAndamento() {
+	public void verificaEleicaoEmAndamento(){
 		new Thread(() -> {
+			// Criamos um processo para receber mensagem de eleicao
 			Conexao conexao = new Conexao();
-			conexao.aguardaMensgemEleicao(this.maquina);
+			String mensagemRecebida = conexao.aguardaMensgemEleicao(this.maquina);
+			// Define como emEleicao caso não esteja e processa a mensagem recebida
+			if(this.eleicao == null) {
+				this.eleicao = new Eleicao(this.maquina);
+			}
+			this.eleicao.recebeMensagemEleicao(mensagemRecebida);
 		}).start();
 	}
 }

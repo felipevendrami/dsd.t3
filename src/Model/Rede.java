@@ -26,9 +26,9 @@ public class Rede {
 		return maquinasRede;
 	}
 	
-	public static Maquina getMaquinaLiderRede() {
+	public static Maquina getMaquinaCoordenadorRede() {
 		for(Maquina maquina : maquinasRede) {
-			if(maquina.isLider()) {
+			if(maquina.isCoordenador()) {
 				return maquina;
 			}
 		}

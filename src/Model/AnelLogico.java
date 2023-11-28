@@ -5,15 +5,15 @@ import java.util.LinkedList;
 
 public class AnelLogico {
 
-	private LinkedList<Maquina> maquinasParticipantes;
+	private LinkedList<Maquina> anelLogico;
 	private String mensagemEleicao;
 
 	public AnelLogico() {
-		this.maquinasParticipantes = Rede.getMaquinasRede();
+		this.anelLogico = Rede.getMaquinasRede();
 	}
 
-	public LinkedList<Maquina> getMaquinasParticipantes() {
-		return maquinasParticipantes;
+	public LinkedList<Maquina> getAnelLogico() {
+		return anelLogico;
 	}
 
 	public String getMensagemEleicao() {
@@ -22,5 +22,13 @@ public class AnelLogico {
 
 	public void setMensagemEleicao(String mensagemEleicao) {
 		this.mensagemEleicao = mensagemEleicao;
+	}
+	
+	public Maquina getMaquinaSucessora(Maquina maquinaAtual) {
+		if(this.anelLogico.indexOf(maquinaAtual) == this.anelLogico.size()) {
+			return this.anelLogico.getFirst();
+		} else {
+			return this.anelLogico.get(this.anelLogico.indexOf(maquinaAtual) + 1);
+		}
 	}
 }
