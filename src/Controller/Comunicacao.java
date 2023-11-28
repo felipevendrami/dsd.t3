@@ -14,7 +14,6 @@ public class Comunicacao{
 	
 	private Rede rede;
 	private Maquina maquina;
-	private boolean emEleicao = false;
 	private Eleicao eleicao;
 
 	public Comunicacao(Maquina maquina){
@@ -71,7 +70,7 @@ public class Comunicacao{
 			// Criamos um processo para receber mensagem de eleicao
 			Conexao conexao = new Conexao();
 			String mensagemRecebida = conexao.aguardaMensgemEleicao(this.maquina);
-			// Define como emEleicao caso não esteja e processa a mensagem recebida
+			// Define nova Eleicao caso nao haja e processa a mensagem recebida
 			if(this.eleicao == null) {
 				this.eleicao = new Eleicao(this.maquina);
 			}
