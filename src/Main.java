@@ -20,10 +20,6 @@ public class Main {
 		//rede.addMaquinaRede(m3);
 		//rede.addMaquinaRede(m4);
 		//rede.addMaquinaRede(m5);
-		
-		String[] teste = new String[2];
-		teste[0] = "ELEICAO";
-		teste[1] = "1,2,3";
 
 		try {
 			Comunicacao comunicacao = new Comunicacao(Rede.getMaquinaLocal());

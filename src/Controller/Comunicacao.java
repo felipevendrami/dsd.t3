@@ -45,6 +45,7 @@ public class Comunicacao{
 	
 	public void operacaoMaquina() {
 		// Como maquina normal, faz requisicoes ao coordenador e recebe a resposta
+		System.out.println("Maquina " + this.maquina.getIpMaquina() + " disponível na rede.");
 		new Thread(() -> {
 			try {
 				Conexao conexao = new Conexao();

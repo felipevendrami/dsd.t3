@@ -24,7 +24,7 @@ public class Conexao{
 	public void aguardarConexoes(Maquina maquina) throws IOException {
 		new Thread(() -> {
 			try {
-				System.out.println("Abrindo servidor como maquina coordenadora ...");
+				System.out.println("Abrindo servidor como maquina coordenadora §§...");
 				ServerSocket server = new ServerSocket(this.porta);
 				server.setReuseAddress(true);
 				Socket conexao = null;
@@ -103,7 +103,9 @@ public class Conexao{
 			System.out.println("Erro no recebimento da mensagem de eleicao: \n" + e.getMessage());
 		} finally {
 			// Fechamos a conexao
-			datagramSocket.close();
+			if(datagramSocket != null) {
+				datagramSocket.close();
+			}
 		}
 		return null;
 	}
@@ -128,7 +130,9 @@ public class Conexao{
 			System.out.println("Erro no envio da mensagem de eleicao: \n" + e.getMessage());
 		} finally {
 			// Fechamos a conexao
-			datagramSocket.close();
+			if(datagramSocket != null) {
+				datagramSocket.close();
+			}
 		}
 	}
 	
