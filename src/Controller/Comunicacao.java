@@ -24,6 +24,7 @@ public class Comunicacao{
 			operacaoMaquinaCoordenador();
 		} else {
 			operacaoMaquina();
+			verificaEleicaoEmAndamento();
 		}
 	}
 
@@ -50,7 +51,6 @@ public class Comunicacao{
 			try {
 				Conexao conexao = new Conexao();
 				while (this.maquina.isAtivo()) {
-					verificaEleicaoEmAndamento();
 					Thread.sleep(REALIZAR_COMUNICACAO);
 					conexao.fazerRequisicao(maquina, Rede.getMaquinaCoordenadorRede());
 				}
