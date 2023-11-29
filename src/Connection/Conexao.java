@@ -24,7 +24,7 @@ public class Conexao{
 	public void aguardarConexoes(Maquina maquina) throws IOException {
 		new Thread(() -> {
 			try {
-				System.out.println("Abrindo servidor como maquina coordenadora §§...");
+				System.out.println("Abrindo servidor como maquina coordenadora " + maquina.getIpMaquina() + " ...");
 				ServerSocket server = new ServerSocket(this.porta);
 				server.setReuseAddress(true);
 				Socket conexao = null;
@@ -46,7 +46,7 @@ public class Conexao{
 							System.out.println("Requisicao recebida de: " + ip.getHostAddress());
 							// Retorna mensagem para a maquina
 							System.out.println("Enviando resposta para: " + ip.getHostAddress());
-							printWriter.println("OK !");
+							printWriter.println("Sou a maquina " + maquina.getIpMaquina());
 						}
 					} catch (IOException e) {
 						throw new IOException(e.getMessage());

@@ -10,17 +10,15 @@ public class Eleicao {
 
 	// Maquina que iniciou a eleicao
 	private Maquina maquinaEleicao;
-	private int idMaquinaEleita = 0;
+	private String identificadorMaquina;
+	private int novoCoordenador = 0;
 	private AnelLogico anelLogico;
 	private String[] mensagemEleicao;
 
 	public Eleicao(Maquina maquinaEleicao) {
 		this.maquinaEleicao = maquinaEleicao;
 		this.anelLogico = new AnelLogico();
-	}
-
-	public int getIdMaquinaEleita() {
-		return idMaquinaEleita;
+		this.identificadorMaquina = getIdentificadorMaquina();
 	}
 
 	public void iniciarEleicao() {
@@ -31,12 +29,12 @@ public class Eleicao {
 		 */
 		this.mensagemEleicao = new String[2];
 		this.mensagemEleicao[0] = "ELEICAO";
-		this.mensagemEleicao[1] = getIdentificadorMaquina();
+		this.mensagemEleicao[1] = this.identificadorMaquina;
 		enviarMensagemEleicao();
 	}
 
 	private String getIdentificadorMaquina() {
-		// Método que retorna o identificador da maquina (ultimos digitos)
+		// Metodo que retorna o identificador da maquina (ultimos digitos)
 		int indicePonto = this.maquinaEleicao.getIpMaquina().lastIndexOf(".");
 		return this.maquinaEleicao.getIpMaquina().substring(indicePonto + 1);
 	}
@@ -58,19 +56,24 @@ public class Eleicao {
 		try {
 			// Montamos a mensagem em um array para processarmos
 			this.mensagemEleicao = mensagemRecebida.split(",");
-			// Verificamos se a maquina atual participa da eleicao
 			
-			for(String posicao : this.mensagemEleicao) {
-				if(posicao.equals(getIdentificadorMaquina())) {
-					// TODO: montar a mensagem de coordenados
-					System.out.println("Percorreu o anel, mensagem: " + mensagemRecebida);
-				}
-			}
+			// Verificamos se a mensagem eh de ELEICAO ou COORDENADOR
 			if(this.mensagemEleicao[0].equals("ELEICAO")) {
-				// Adicionamos o identificador da maquina
-				this.mensagemEleicao[1] += getIdentificadorMaquina();
+				//Identifica se a maquina ja esta participando
+				if(maquinaParticipante()) {
+					// Se sim, define o coordenador e monta a mensagem de COORDENADOR
+					defineNovoCoordenador();
+					this.mensagemEleicao[0] = "COORDENADOR";
+					this.mensagemEleicao[1] = String.valueOf(this.novoCoordenador);
+				} else {
+					// Se nao, adicionamos o identificador da maquina
+					if(this.maquinaEleicao.isAtivo()) {
+						this.mensagemEleicao[1] += "," + this.mensagemEleicao;
+					}
+				}
 			} else {
-				// TODO: caso a mensagem for de coordenados
+				// TODO: alterar o atributo de coordenador das máqinas e reiniciar
+				//this.anelLogico.eleicaoFinalizada();
 			}
 			enviarMensagemEleicao();
 		} catch (Exception e) {
@@ -78,7 +81,21 @@ public class Eleicao {
 		}
 	}
 
-	public void defineNovoCoordenador() {
-		
+	private void defineNovoCoordenador() {
+		String[] participantes = this.mensagemEleicao[1].split(",");
+		for(String identificador : participantes) {
+			int identificadorInt = Integer.parseInt(identificador);
+			if(identificadorInt > this.novoCoordenador) {
+				this.novoCoordenador = identificadorInt;
+			}
+		}
+	}
+	
+	private boolean maquinaParticipante() {
+		if(this.mensagemEleicao[1].contains(this.identificadorMaquina)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
