@@ -84,6 +84,9 @@ public class Comunicacao{
 						this.eleicao = new Eleicao(this.maquina);
 					}
 					this.eleicao.recebeMensagemEleicao(mensagemRecebida);
+					if(mensagemRecebida.contains("COORDENADOR")){
+						break;
+					}	
 				} else {
 					break;
 				}
