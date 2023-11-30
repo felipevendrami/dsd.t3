@@ -9,6 +9,7 @@ public class Comunicacao{
 	// Tempos para execucao da Thread
 	private int REALIZAR_COMUNICACAO = 5000;
 	private int INATIVAR_COORDENADOR = 17000;
+	private int ATIVAR_MAQUINA = 10000;
 	
 	private Rede rede;
 	private Maquina maquina;
@@ -37,6 +38,9 @@ public class Comunicacao{
 				this.maquina.setAtivo(false);
 				this.maquina.setCoordenador(false);
 				System.out.println("COORDENADOR INATIVO");
+				verificaEleicaoEmAndamento();
+				Thread.sleep(ATIVAR_MAQUINA);
+				this.maquina.setAtivo(true);
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
@@ -76,8 +80,9 @@ public class Comunicacao{
 				// Define nova Eleicao caso nao haja e processa a mensagem recebida
 				if(this.maquina.isAtivo()) {
 					if(this.eleicao == null) {
+						System.out.println("Processo de eleicao em andamento...");
 						this.eleicao = new Eleicao(this.maquina);
-						}
+					}
 					this.eleicao.recebeMensagemEleicao(mensagemRecebida);
 				} else {
 					break;

@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 
+import Controller.Comunicacao;
 import Model.Maquina;
 
 public class Rede {
@@ -53,7 +54,7 @@ public class Rede {
 		}
 	}
 	
-	public static void defineNovoCoordenador(int identificadorNovoCoordenador) {
+	public static void defineNovoCoordenador(int identificadorNovoCoordenador) throws UnknownHostException {
 		// Busca da maquina coordenadora para atualizar a Rede
 		for(Maquina maquina : Rede.maquinasRede) {
 			int indicePonto = maquina.getIpMaquina().lastIndexOf(".");
@@ -61,9 +62,18 @@ public class Rede {
 			if(identificadorMaquina.equals(String.valueOf(identificadorNovoCoordenador))) {
 				maquina.setCoordenador(true);
 				System.out.println(maquina.getIpMaquina());
+				
+				// Caso a propria maquina esteja se definindo como coordenadora, ela inicia as funcoes como tal
+				if(Rede.getMaquinaLocal() == maquina) {
+					Rede.defineFuncaoNovoCoordenador(maquina);
+				}
 			} else {
 				maquina.setCoordenador(false);
 			}
 		}
+	}
+	
+	public static void defineFuncaoNovoCoordenador(Maquina maquina) {
+		Comunicacao comunicacao = new Comunicacao(maquina);
 	}
 }

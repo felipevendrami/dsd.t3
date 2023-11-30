@@ -15,6 +15,7 @@ public class Eleicao {
 	private int novoCoordenador = 0;
 	private AnelLogico anelLogico;
 	private String[] mensagemEleicao;
+	private boolean emEleicao = true;
 
 	public Eleicao(Maquina maquinaEleicao) {
 		this.maquinaEleicao = maquinaEleicao;
@@ -55,6 +56,7 @@ public class Eleicao {
 
 	public void recebeMensagemEleicao(String mensagemRecebida) {
 		try {
+			mensagemRecebida = mensagemRecebida.trim();
 			// Montamos a mensagem em um array para processarmos
 			this.mensagemEleicao = mensagemRecebida.split(",");
 			
@@ -66,11 +68,11 @@ public class Eleicao {
 					defineNovoCoordenador();
 					this.mensagemEleicao[0] = "COORDENADOR";
 					this.mensagemEleicao[1] = String.valueOf(this.novoCoordenador);
+					enviarMensagemEleicao();
 				} else {
 					// Se nao, adicionamos o identificador da maquina
 					if(this.maquinaEleicao.isAtivo()) {
-						this.mensagemEleicao[1] += "," + this.mensagemEleicao;
-						enviarMensagemEleicao();
+						this.mensagemEleicao[1] += ";" + this.identificadorMaquina;
 					}
 				}
 			} else {
@@ -78,8 +80,12 @@ public class Eleicao {
 				System.out.print("Definindo novo coodenador: ");
 				this.novoCoordenador = Integer.parseInt(this.mensagemEleicao[1]);
 				Rede.defineNovoCoordenador(this.novoCoordenador);
+				if(this.emEleicao) {
+					enviarMensagemEleicao();
+					this.emEleicao = false;
+				}
 			}
-			if(this.novoCoordenador == 0) {
+			if((this.novoCoordenador == 0) && (this.emEleicao == true)) {
 				enviarMensagemEleicao();
 			}
 		} catch (Exception e) {
@@ -88,7 +94,7 @@ public class Eleicao {
 	}
 
 	private void defineNovoCoordenador() {
-		String[] participantes = this.mensagemEleicao[1].split(",");
+		String[] participantes = this.mensagemEleicao[1].split(";");
 		for(String identificador : participantes) {
 			int identificadorInt = Integer.parseInt(identificador);
 			if(identificadorInt > this.novoCoordenador) {

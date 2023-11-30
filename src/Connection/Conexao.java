@@ -77,7 +77,7 @@ public class Conexao{
 			String mensagemRetorno = bufferedReader.readLine();
 			System.out.println("Resposta do coordenador recebida: " + mensagemRetorno);
 		} catch (IOException e) {
-			System.out.println("Erro ao realizar requisicao: \n" + e.getMessage());
+			System.out.println("Erro ao realizar requisicao [" + e.getMessage() + "]");
 		} finally {
 			conexao.close();
 		}
@@ -100,7 +100,7 @@ public class Conexao{
 			System.out.println("Mensagem de eleicao recebida de [" + ipMaquinaRemetente + "]: " + mensagemRecebida);
 			return mensagemRecebida;
 		} catch (Exception e) {
-			System.out.println("Erro no recebimento da mensagem de eleicao: \n" + e.getMessage());
+			System.out.println("Erro no recebimento da mensagem de eleicao [" + e.getMessage() + "]");
 		} finally {
 			// Fechamos a conexao
 			if(datagramSocket != null) {
@@ -127,7 +127,7 @@ public class Conexao{
 			System.out.println("Enviando mensagem de eleicao para [" + ipMaquinaSucessora + "]: " + mensagemEleicao);
 			datagramSocket.send(datagramPacket);
 		} catch (Exception e) {
-			System.out.println("Erro no envio da mensagem de eleicao: \n" + e.getMessage());
+			System.out.println("Erro no envio da mensagem de eleicao [" + e.getMessage() + "]");
 		} finally {
 			// Fechamos a conexao
 			if(datagramSocket != null) {

@@ -26,16 +26,16 @@ public class AnelLogico {
 	
 	public Maquina getMaquinaSucessora(Maquina maquinaAtual) {
 		if((this.anelLogico.indexOf(maquinaAtual) + 1) == this.anelLogico.size()) {
-			if(!this.anelLogico.getFirst().isCoordenador()) {
+			if(this.anelLogico.getFirst().isCoordenador()) {
 				return this.anelLogico.get(1);
 			} else {
 				return this.anelLogico.getFirst();
 			}
 		} else {
-			if(!this.anelLogico.get(this.anelLogico.indexOf(maquinaAtual) + 1).isCoordenador()) {
-				return this.anelLogico.get(this.anelLogico.indexOf(maquinaAtual) + 1);
-			} else {
+			if(this.anelLogico.get(this.anelLogico.indexOf(maquinaAtual) + 1).isCoordenador()) {
 				return this.anelLogico.get(this.anelLogico.indexOf(maquinaAtual) + 2);
+			} else {
+				return this.anelLogico.get(this.anelLogico.indexOf(maquinaAtual) + 1);
 			}
 		}
 	}

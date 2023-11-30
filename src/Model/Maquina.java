@@ -1,5 +1,7 @@
 package Model;
 
+import Controller.Comunicacao;
+
 public class Maquina {
 
 	private String ipMaquina;
