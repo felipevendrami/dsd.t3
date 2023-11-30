@@ -52,4 +52,18 @@ public class Rede {
 			return Rede.maquinasRede.get(Rede.maquinasRede.indexOf(maquinaAtual) + 1);
 		}
 	}
+	
+	public static void defineNovoCoordenador(int identificadorNovoCoordenador) {
+		// Busca da maquina coordenadora para atualizar a Rede
+		for(Maquina maquina : Rede.maquinasRede) {
+			int indicePonto = maquina.getIpMaquina().lastIndexOf(".");
+			String identificadorMaquina = maquina.getIpMaquina().substring(indicePonto + 1);
+			if(identificadorMaquina.equals(String.valueOf(identificadorNovoCoordenador))) {
+				maquina.setCoordenador(true);
+				System.out.println(maquina.getIpMaquina());
+			} else {
+				maquina.setCoordenador(false);
+			}
+		}
+	}
 }

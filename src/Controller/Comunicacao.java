@@ -1,7 +1,5 @@
 package Controller;
 
-import java.util.ArrayList;
-
 import Connection.Conexao;
 import Model.Maquina;
 import Model.Rede;
@@ -37,6 +35,7 @@ public class Comunicacao{
 				// Inativamos o coordenador para forçar a realizacao de uma nova eleicao
 				Thread.sleep(INATIVAR_COORDENADOR);
 				this.maquina.setAtivo(false);
+				this.maquina.setCoordenador(false);
 				System.out.println("COORDENADOR INATIVO");
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
@@ -50,9 +49,11 @@ public class Comunicacao{
 		new Thread(() -> {
 			try {
 				Conexao conexao = new Conexao();
-				while (this.maquina.isAtivo()) {
+				while ((this.maquina.isAtivo()) && (this.eleicao == null)) {
 					Thread.sleep(REALIZAR_COMUNICACAO);
-					conexao.fazerRequisicao(maquina, Rede.getMaquinaCoordenadorRede());
+					if(this.eleicao == null) {
+						conexao.fazerRequisicao(maquina, Rede.getMaquinaCoordenadorRede());
+					}
 				}
 			} catch (Exception e) {
 				//System.out.println(e.getMessage());
@@ -68,14 +69,20 @@ public class Comunicacao{
 	
 	public void verificaEleicaoEmAndamento(){
 		new Thread(() -> {
-			// Criamos um processo para receber mensagem de eleicao
-			Conexao conexao = new Conexao();
-			String mensagemRecebida = conexao.aguardaMensgemEleicao(this.maquina);
-			// Define nova Eleicao caso nao haja e processa a mensagem recebida
-			if(this.eleicao == null) {
-				this.eleicao = new Eleicao(this.maquina);
+			while(!this.maquina.isCoordenador()) {
+				// Criamos um processo para receber mensagem de eleicao
+				Conexao conexao = new Conexao();
+				String mensagemRecebida = conexao.aguardaMensgemEleicao(this.maquina);
+				// Define nova Eleicao caso nao haja e processa a mensagem recebida
+				if(this.maquina.isAtivo()) {
+					if(this.eleicao == null) {
+						this.eleicao = new Eleicao(this.maquina);
+						}
+					this.eleicao.recebeMensagemEleicao(mensagemRecebida);
+				} else {
+					break;
+				}
 			}
-			this.eleicao.recebeMensagemEleicao(mensagemRecebida);
 		}).start();
 	}
 }

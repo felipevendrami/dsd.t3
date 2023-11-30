@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import Connection.Conexao;
 import Model.AnelLogico;
 import Model.Maquina;
+import Model.Rede;
 
 public class Eleicao {
 
@@ -69,13 +70,18 @@ public class Eleicao {
 					// Se nao, adicionamos o identificador da maquina
 					if(this.maquinaEleicao.isAtivo()) {
 						this.mensagemEleicao[1] += "," + this.mensagemEleicao;
+						enviarMensagemEleicao();
 					}
 				}
 			} else {
-				// TODO: alterar o atributo de coordenador das máqinas e reiniciar
-				//this.anelLogico.eleicaoFinalizada();
+				// Se a mensagem for de COORDENADOR, atualizamos a Rede com o novo coordenador
+				System.out.print("Definindo novo coodenador: ");
+				this.novoCoordenador = Integer.parseInt(this.mensagemEleicao[1]);
+				Rede.defineNovoCoordenador(this.novoCoordenador);
 			}
-			enviarMensagemEleicao();
+			if(this.novoCoordenador == 0) {
+				enviarMensagemEleicao();
+			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}

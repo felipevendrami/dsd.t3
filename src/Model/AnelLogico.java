@@ -31,8 +31,4 @@ public class AnelLogico {
 			return this.anelLogico.get(this.anelLogico.indexOf(maquinaAtual) + 1);
 		}
 	}
-	
-	public void eleicaoFinalizada() {
-		
-	}
 }
