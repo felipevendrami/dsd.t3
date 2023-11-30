@@ -64,21 +64,22 @@ public class Rede {
 				System.out.println(maquina.getIpMaquina());
 				
 				// Caso a propria maquina esteja se definindo como coordenadora, ela inicia as funcoes como tal
-				Rede.defineFuncaoNovoCoordenador(maquina);
+				Rede.defineFuncaoCoordenador(maquina);
 			} else {
 				maquina.setCoordenador(false);
+				Rede.defineFuncao(maquina);
 			}
 		}
 	}
 
-	public static void defineFuncao(Maquina maquina) {
+	public static void defineFuncao(Maquina maquina) throws UnknownHostException {
 		if(Rede.getMaquinaLocal() == maquina) {
 			System.out.println("Retornando para funcao normal ...");
 			Comunicacao comunicacao = new Comunicacao(maquina);
 		}
 	}
 	
-	public static void defineFuncaoCoordenador(Maquina maquina) {
+	public static void defineFuncaoCoordenador(Maquina maquina) throws UnknownHostException {
 		if(Rede.getMaquinaLocal() == maquina) {
 			System.out.println("Alterando para funcao de coordenador ...");
 			Comunicacao comunicacao = new Comunicacao(maquina);
