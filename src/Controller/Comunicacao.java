@@ -38,9 +38,9 @@ public class Comunicacao{
 				this.maquina.setAtivo(false);
 				this.maquina.setCoordenador(false);
 				System.out.println("COORDENADOR INATIVO");
+				/*Thread.sleep(ATIVAR_MAQUINA);
 				verificaEleicaoEmAndamento();
-				Thread.sleep(ATIVAR_MAQUINA);
-				this.maquina.setAtivo(true);
+				this.maquina.setAtivo(true);*/
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}

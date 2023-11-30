@@ -65,6 +65,7 @@ public class Rede {
 				
 				// Caso a propria maquina esteja se definindo como coordenadora, ela inicia as funcoes como tal
 				if(Rede.getMaquinaLocal() == maquina) {
+					System.out.println("Alterando para funcao de coordenador ...");
 					Rede.defineFuncaoNovoCoordenador(maquina);
 				}
 			} else {

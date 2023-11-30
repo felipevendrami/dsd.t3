@@ -83,6 +83,7 @@ public class Eleicao {
 				if(this.emEleicao) {
 					enviarMensagemEleicao();
 					this.emEleicao = false;
+					System.out.println("Eleicao finalizada !");
 				}
 			}
 			if((this.novoCoordenador == 0) && (this.emEleicao == true)) {
